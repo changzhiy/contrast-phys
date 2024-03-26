@@ -52,7 +52,7 @@ def my_main(_run, total_epoch, T, S, lr, result_dir, fs, delta_t, K, in_ch):
     exp_dir = result_dir + '/%d'%(int(_run._id)) # store experiment recording to the path
 
     # get the training and test file path list by spliting the dataset
-    train_list, test_list = UBFC_LU_split() # TODO: you should define your function to split your dataset for training and testing
+    train_list, test_list = PURE_split() # TODO: you should define your function to split your dataset for training and testing
     np.save(exp_dir+'/train_list.npy', train_list)
     np.save(exp_dir+'/test_list.npy', test_list)
 
