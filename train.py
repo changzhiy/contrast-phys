@@ -14,6 +14,7 @@ from torch import optim
 from torch.utils.data import DataLoader
 from sacred import Experiment
 from sacred.observers import FileStorageObserver
+from tqdm import tqdm
 
 ex = Experiment('model_train', save_git_info=False)
 
@@ -71,8 +72,11 @@ def my_main(_run, total_epoch, T, S, lr, result_dir, fs, delta_t, K, in_ch):
     # define the optimizer
     opt = optim.AdamW(model.parameters(), lr=lr)
 
-    for e in range(total_epoch):
+    for e in tqdm(range(total_epoch)):
         for it in range(np.round(60/(T/fs)).astype('int')): # TODO: 60 means the video length of each video is 60s. If each video's length in your dataset is other value (e.g, 30s), you should use that value.
+            total_loss = 0
+            total_p_loss = 0
+            total_n_loss = 0
             for imgs in dataloader: # dataloader randomly samples a video clip with length T
                 imgs = imgs.to(device)
 
@@ -82,6 +86,11 @@ def my_main(_run, total_epoch, T, S, lr, result_dir, fs, delta_t, K, in_ch):
 
                 # define the loss functions
                 loss, p_loss, n_loss = loss_func(model_output)
+                
+                
+                total_loss += loss.item()
+                total_p_loss += p_loss.item()
+                total_n_loss += n_loss.item()
 
                 # optimize
                 opt.zero_grad()
