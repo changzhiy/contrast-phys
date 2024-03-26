@@ -25,6 +25,25 @@ def UBFC_LU_split():
                 train_list.append(h5_dir+'/%d.h5'%(subject))
 
     return train_list, val_list    
+
+# pure dataset split method defined by czy
+def PURE_split():
+    # split PURE dataset into training and testing parts
+    # the function returns the file paths for the training set and test set.
+    
+    h5_dir = '../datasets/PURE_h5/'
+    train_list = []
+    val_list = []
+    
+    subject_list = ['0'+str(i+1) + '-0' + str(j+1)  for i in range(4) for j in range(6)]
+    # 17 subjects for validation
+    train_list = ["01-03", "01-01", "04-05", "02-04", "04-02", "03-06", "04-03", "02-03", "04-04", "02-05", "02-02", "02-06", "02-01", "01-04", "01-02", "03-03", "03-02"]
+    
+    val_list = [subject for subject in subject_list if subject not in train_liststring_list]
+    train_list = [h5_dir + i +'out.h5' for i in train_list]
+    val_list = [h5_dir + i +'out.h5' for i in val_list]
+
+    return train_list, val_list  
     
 class H5Dataset(Dataset):
 
