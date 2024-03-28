@@ -32,6 +32,11 @@ If you are using OpenFace on Windows, you may use the following For loop in Pyth
 for v in video_list:
     os.system('.\\openface\\FeatureExtraction.exe -f %s -out_dir %s -2Dfp'%(v, landmarks_folder))
 ```
+
+openface 2安装推荐使用windows，只需要下载visual studio和github仓库中的zip文件以及模型参数文件即可，2024年3月在win 10上成功部署。（Windows is recommended for openface 2 installation. All you need to do is download visual studio, github repository and model parameter file. The deployment was successful on win 10 in March 2024.）
+
+在windows系统中也可以参照openface.bat对视频执行特征提取操作。（In windows system, you can also refer to openface.bat to perform feature extraction operations on videos.）
+
 We first get the minimum and maximum horizontal and vertical coordinates of the landmarks to locate the central facial point for each frame. The bounding box size is 1.2 times the vertical coordinate range of landmarks from the first frame and is fixed for the following frames. After getting the central facial point of each frame and the size of the bounding box, we crop the face from each frame. The cropped faces are resized to $128 \times 128$, which are ready to be fed into our model. Video frames in a video should be stored in a .h5 file. Please refer to `preprocessing.py` for more details. For example, for UBFC-rPPG dataset, the processed dataset should like
 
 ```
