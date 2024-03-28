@@ -1,0 +1,6 @@
+C:\Users\Administrator\Downloads\OpenFace_2.2.0_win_x64\OpenFace_2.2.0_win_x64\FeatureExtraction.exe -f "D:\pure_dataset\05-01out.avi"
+C:\Users\Administrator\Downloads\OpenFace_2.2.0_win_x64\OpenFace_2.2.0_win_x64\FeatureExtraction.exe -f "D:\pure_dataset\05-02out.avi"
+C:\Users\Administrator\Downloads\OpenFace_2.2.0_win_x64\OpenFace_2.2.0_win_x64\FeatureExtraction.exe -f "D:\pure_dataset\05-03out.avi"
+C:\Users\Administrator\Downloads\OpenFace_2.2.0_win_x64\OpenFace_2.2.0_win_x64\FeatureExtraction.exe -f "D:\pure_dataset\05-04out.avi"
+C:\Users\Administrator\Downloads\OpenFace_2.2.0_win_x64\OpenFace_2.2.0_win_x64\FeatureExtraction.exe -f "D:\pure_dataset\05-05out.avi"
+C:\Users\Administrator\Downloads\OpenFace_2.2.0_win_x64\OpenFace_2.2.0_win_x64\FeatureExtraction.exe -f "D:\pure_dataset\05-06out.avi"
