@@ -31,7 +31,7 @@ def PURE_split():
     # split PURE dataset into training and testing parts
     # the function returns the file paths for the training set and test set.
     
-    h5_dir = '../datasets/PURE_h5/'
+    h5_dir = '../drive/MyDrive/'
     train_list = []
     val_list = []
     
