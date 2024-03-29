@@ -85,6 +85,6 @@ class H5Dataset_with_landmark(Dataset):
             idx_end = idx_start+self.T
 
             img_seq = f['imgs'][idx_start:idx_end]
-            land_mark_seq = f['lms'][idx_start:idx_end]
+            land_mark_seq = f['landmarks'][idx_start:idx_end]
             img_seq = np.transpose(img_seq, (3, 0, 1, 2)).astype('float32')
         return img_seq,land_mark_seq
