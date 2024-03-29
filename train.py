@@ -81,7 +81,6 @@ def my_main(_run, total_epoch, T, S, lr, result_dir, fs, delta_t, K, in_ch):
 
                 imgs = imgs.to(device)
                 landmarks = landmarks.to(device)
-                print(landmarks.shape)
                 # model forward propagation
                 model_output = model(imgs,landmarks) 
                 rppg = model_output[:,-1] # get rppg
