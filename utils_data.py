@@ -40,8 +40,8 @@ def PURE_split():
     train_list = ["01-03", "01-01", "04-05", "02-04", "04-02", "03-06", "04-03", "02-03", "04-04", "02-05", "02-02", "02-06", "02-01", "01-04", "01-02", "03-03", "03-02",'05-01','05-02','05-04','05-06']
     
     val_list = [subject for subject in subject_list if subject not in train_list]
-    train_list = [h5_dir + i +'out.h5' for i in train_list]
-    val_list = [h5_dir + i +'out.h5' for i in val_list]
+    train_list = [h5_dir + i +'lmout.h5' for i in train_list]
+    val_list = [h5_dir + i +'lmout.h5' for i in val_list]
 
     return train_list, val_list  
     
