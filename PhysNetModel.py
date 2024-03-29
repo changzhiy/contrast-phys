@@ -195,9 +195,9 @@ class PhysNet_with_landmark(nn.Module):
                              nn.ELU(),
                              nn.Linear(128, self.S*self.S))
 
-    def forward(self, data):
-        x, lm = data
-        lm = self.lstm_seq(lm)
+    def forward(self, x,lm):
+        
+        lm,_ = self.lstm_seq(lm)
         lm = self.proj(lm)
 
         means = torch.mean(x, dim=(2, 3, 4), keepdim=True)
@@ -221,13 +221,16 @@ class PhysNet_with_landmark(nn.Module):
         x = F.pad(x, (0, 0, 0, 0, 0, parity[-2]), mode='replicate')
         x = self.end(x)  # (B, 1, T, S, S), ST-rPPG block
 
+        print(lm.shape)
         x_list = []
         for a in range(self.S):
             for b in range(self.S):
-                x_list.append(x[:, :, :, a, b])  # (B, 1, T)
-
+                x_list.append(x[:, :, :, a, b] + lm[:,:,a+b].unsqueeze(-1).permute(0,2,1))  # (B, 1, T)
+        # 这里源代码中的小x我认为更多充当的是cls的作用
         x = sum(x_list) / (self.S * self.S)  # (B, 1, T)
         X = torch.cat(x_list + [x], 1)  # (B, M, T), flatten all spatial signals to the second dimension
+        
         # try to plus lm and X, test the performance
-        X = lm + X
+        
+        
         return X
