@@ -57,7 +57,7 @@ class H5Dataset(Dataset):
     def __getitem__(self, idx):
         with h5py.File(self.train_list[idx], 'r') as f:
             img_length = f['imgs'].shape[0]
-
+            # 为什么要随机选取一定长度的视频而不是把视频分段？
             idx_start = np.random.choice(img_length-self.T)
 
             idx_end = idx_start+self.T
@@ -65,3 +65,26 @@ class H5Dataset(Dataset):
             img_seq = f['imgs'][idx_start:idx_end]
             img_seq = np.transpose(img_seq, (3, 0, 1, 2)).astype('float32')
         return img_seq
+
+class H5Dataset_with_landmark(Dataset):
+
+    def __init__(self, train_list, T):
+        self.train_list = train_list # list of .h5 file paths for training
+        self.T = T # video clip length
+
+    def __len__(self):
+        return len(self.train_list)
+
+    def __getitem__(self, idx):
+        with h5py.File(self.train_list[idx], 'r') as f:
+            img_length = f['imgs'].shape[0]
+            
+            # 为什么要随机选取一定长度的视频而不是把视频分段？
+            idx_start = np.random.choice(img_length-self.T)
+
+            idx_end = idx_start+self.T
+
+            img_seq = f['imgs'][idx_start:idx_end]
+            land_mark_seq = f['lms'][idx_start:idx_end]
+            img_seq = np.transpose(img_seq, (3, 0, 1, 2)).astype('float32')
+        return img_seq,land_mark_seq
