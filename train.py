@@ -4,7 +4,7 @@ import numpy as np
 import os
 import h5py
 import torch
-from PhysNetModel import PhysNet
+from PhysNetModel import *
 from loss import ContrastLoss
 from IrrelevantPowerRatio import IrrelevantPowerRatio
 
@@ -58,12 +58,12 @@ def my_main(_run, total_epoch, T, S, lr, result_dir, fs, delta_t, K, in_ch):
     np.save(exp_dir+'/test_list.npy', test_list)
 
     # define the dataloader
-    dataset = H5Dataset(train_list, T) # please read the code about H5Dataset when preparing your dataset
+    dataset = H5Dataset_with_landmark(train_list, T) # please read the code about H5Dataset when preparing your dataset
     dataloader = DataLoader(dataset, batch_size=2, # two videos for contrastive learning
                             shuffle=True, num_workers=4, pin_memory=True, drop_last=True) # TODO: If you run the code on Windows, please remove num_workers=4.
     
     # define the model and loss
-    model = PhysNet(S, in_ch=in_ch).to(device).train()
+    model = PhysNet_with_landmark(S, in_ch=in_ch).to(device).train()
     loss_func = ContrastLoss(delta_t, K, fs, high_pass=40, low_pass=250)
 
     # define irrelevant power ratio
@@ -77,11 +77,13 @@ def my_main(_run, total_epoch, T, S, lr, result_dir, fs, delta_t, K, in_ch):
             total_loss = 0
             total_p_loss = 0
             total_n_loss = 0
-            for imgs in dataloader: # dataloader randomly samples a video clip with length T
-                imgs = imgs.to(device)
+            for imgs,landmarks in dataloader: # dataloader randomly samples a video clip with length T
 
+                imgs = imgs.to(device)
+                landmarks = landmarks.to(device)
+                print(landmarks.shape)
                 # model forward propagation
-                model_output = model(imgs) 
+                model_output = model(imgs,landmarks) 
                 rppg = model_output[:,-1] # get rppg
 
                 # define the loss functions
