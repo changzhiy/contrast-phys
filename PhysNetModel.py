@@ -221,7 +221,6 @@ class PhysNet_with_landmark(nn.Module):
         x = F.pad(x, (0, 0, 0, 0, 0, parity[-2]), mode='replicate')
         x = self.end(x)  # (B, 1, T, S, S), ST-rPPG block
 
-        print(lm.shape)
         x_list = []
         for a in range(self.S):
             for b in range(self.S):
