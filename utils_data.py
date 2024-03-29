@@ -35,7 +35,7 @@ def PURE_split():
     train_list = []
     val_list = []
     
-    subject_list = ['0'+str(i+1) + '-0' + str(j+1)  for i in range(4) for j in range(6)]
+    subject_list = ['0'+str(i+1) + '-0' + str(j+1)  for i in range(5) for j in range(6)]
     # 17 subjects for validation
     train_list = ["01-03", "01-01", "04-05", "02-04", "04-02", "03-06", "04-03", "02-03", "04-04", "02-05", "02-02", "02-06", "02-01", "01-04", "01-02", "03-03", "03-02",'05-01','05-02','05-04','05-06']
     
