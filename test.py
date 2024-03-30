@@ -27,6 +27,7 @@ def my_config():
     else:
         device = torch.device('cpu')
 
+
 @ex.automain
 def my_main(_run, e, train_exp_dir, device, time_interval):
 
@@ -81,3 +82,62 @@ def my_main(_run, e, train_exp_dir, device, time_interval):
             # results = {'rppg_list': rppg_list, 'bvp_list': bvp_list, 'bvppeak_list':bvppeak_list}
             results = {'rppg_list': rppg_list, 'bvp_list': bvp_list}
             np.save(pred_exp_dir+'/'+h5_path.split('/')[-1][:-3], results)
+
+
+@ex.automain
+def my_main_with_landmark(_run, e, train_exp_dir, device, time_interval):
+    # load test file paths
+    test_list = list(np.load(train_exp_dir + '/test_list.npy'))
+    pred_exp_dir = train_exp_dir + '/%d' % (int(_run._id))  # prediction experiment directory
+
+    with open(train_exp_dir + '/config.json') as f:
+        config_train = json.load(f)
+
+    model = PhysNet_with_landmark(config_train['S'], config_train['in_ch']).to(device).eval()
+    model.load_state_dict(
+        torch.load(train_exp_dir + '/epoch%d.pt' % (e), map_location=device))  # load weights to the model
+
+    @torch.no_grad()
+    def dl_model(imgs_clip, lms):
+        # model inference
+        img_batch = imgs_clip
+        img_batch = img_batch.transpose((3, 0, 1, 2))  # 调整到合适的顺序
+        img_batch = img_batch[np.newaxis].astype('float32')
+        img_batch = torch.tensor(img_batch).to(device)
+        # print(img_batch.shape,lms.shape)
+        rppg = model(img_batch, torch.tensor(lms).unsqueeze(0).to(device))[:, -1, :]
+        rppg = rppg[0].detach().cpu().numpy()
+        return rppg
+
+    for h5_path in test_list:
+        h5_path = str(h5_path)
+
+        with h5py.File(h5_path, 'r') as f:
+            imgs = f['imgs']
+            lms = f['landmarks']
+            bvp = f['bvp']
+
+            # bvppeak = f['bvp_peak']
+            fs = config_train['fs']
+
+            duration = np.min([imgs.shape[0], bvp.shape[0]]) / fs
+            num_blocks = int(duration // time_interval)
+
+            rppg_list = []
+            bvp_list = []
+            # bvppeak_list = []
+
+            for b in range(num_blocks):
+                rppg_clip = dl_model(imgs[b * time_interval * fs:(b + 1) * time_interval * fs],
+                                     lms[b * time_interval * fs:(b + 1) * time_interval * fs])
+                rppg_list.append(rppg_clip)
+
+                bvp_list.append(bvp[b * time_interval * fs:(b + 1) * time_interval * fs])
+                # bvppeak_list.append(bvppeak[b*time_interval*fs:(b+1)*time_interval*fs])
+
+            rppg_list = np.array(rppg_list)
+            bvp_list = np.array(bvp_list)
+            # bvppeak_list = np.array(bvppeak_list)
+            # results = {'rppg_list': rppg_list, 'bvp_list': bvp_list, 'bvppeak_list':bvppeak_list}
+            results = {'rppg_list': rppg_list, 'bvp_list': bvp_list}
+            np.save(pred_exp_dir + '/' + h5_path.split('/')[-1][:-3], results)
