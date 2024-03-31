@@ -20,6 +20,12 @@ Please check `requirement.txt` for the required Python libraries.
 
 ## Dataset Preprocessing
 
+需要将PURE的图片数据变成无损的.avi数据，可以在python中使用如下代码：（To convert PURE image data to lossless.avi data, use the following code in python:）
+
+```
+!ffmpeg -framerate 30 -pattern_type glob -i {png_path} -c:v ffv1 {output_path}
+```
+
 The original videos are firstly preprocessed to crop the face. Facial landmarks are generated using [OpenFace](https://github.com/TadasBaltrusaitis/OpenFace). I use the following OpenFace commend to get the facial landmark (.csv file) from each video. For more details, you could check [here](https://github.com/TadasBaltrusaitis/OpenFace/wiki/Command-line-arguments).
 
 If you are using OpenFace on Linux, you may use the following command in Bash to get the landmark from one video. You can use Bash For loop to get landmarks from multiple videos.
@@ -33,7 +39,7 @@ for v in video_list:
     os.system('.\\openface\\FeatureExtraction.exe -f %s -out_dir %s -2Dfp'%(v, landmarks_folder))
 ```
 
-openface 2安装推荐使用windows，只需要下载visual studio和github仓库中的zip文件以及模型参数文件即可，2024年3月在win 10上成功部署。（Windows is recommended for openface 2 installation. All you need to do is download visual studio, github repository and model parameter file. The deployment was successful on win 10 in March 2024.）
+openface 2安装推荐使用windows，只需要下载最新的visual studio和github仓库中的zip文件以及模型参数文件即可，2024年3月在win 10上成功部署。（Windows is recommended for openface 2 installation. All you need to do is download latest visual studio, github repository and model parameter file. The deployment was successful on win 10 in March 2024.）
 
 在windows系统中也可以参照openface.bat对视频执行特征提取操作。（In windows system, you can also refer to openface.bat to perform feature extraction operations on videos.）
 
