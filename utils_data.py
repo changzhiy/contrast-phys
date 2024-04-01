@@ -39,7 +39,7 @@ def PURE_split():
     subject_list = ['01-01lmout.h5','01-02lmout.h5','01-03lmout.h5','01-04lmout.h5','01-05lmout.h5','01-06lmout.h5','02-01lmout.h5','02-02lmout.h5','02-03lmout.h5','02-04lmout.h5','02-05lmout.h5','02-06lmout.h5','03-01lmout.h5','03-02lmout.h5','03-03lmout.h5','03-04lmout.h5','03-05lmout.h5','03-06lmout.h5','04-01lmout.h5','04-02lmout.h5','04-03lmout.h5','04-04lmout.h5','04-05lmout.h5','04-06lmout.h5','05-01lmout.h5','05-02lmout.h5','05-03lmout.h5','05-04lmout.h5','05-05lmout.h5','05-06lmout.h5','06-01lmout.h5','06-03lmout.h5','06-04lmout.h5','06-05lmout.h5','06-06lmout.h5','07-01lmout.h5','07-02lmout.h5','07-03lmout.h5','07-04lmout.h5','07-05lmout.h5','07-06lmout.h5','08-01lmout.h5','08-02lmout.h5','08-03lmout.h5','08-04lmout.h5','08-05lmout.h5','08-06lmout.h5','09-01lmout.h5','09-02lmout.h5','09-03lmout.h5','09-04lmout.h5','09-05lmout.h5','09-06lmout.h5','10-01lmout.h5','10-02lmout.h5','10-03lmout.h5','10-04lmout.h5','10-05lmout.h5','10-06lmout.h5']
     random.seed(0)
     train_list = random.sample(subject_list, k=int(0.8 * len(subject_list)))
-    val_list = list(set(subject_list) - set(subject_list))
+    val_list = list(set(subject_list) - set(train_list))
     train_list = [h5_dir + i  for i in train_list]
     val_list = [h5_dir + i  for i in val_list]
 
